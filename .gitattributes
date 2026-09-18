@@ -1,0 +1,24 @@
+# Preserva fontes ANSI/Windows-1252 do VB6; não converte a codificação.
+*.bas text eol=crlf
+*.frm text eol=crlf
+*.cls text eol=crlf
+*.ctl text eol=crlf
+*.vbp text eol=crlf
+*.frx binary
+*.ctx binary
+*.res binary
+*.sql text eol=lf
+*.md text eol=lf
+*.ps1 text eol=crlf
+*.json text eol=lf
+*.png binary
+*.jpg binary
+*.ico binary
+
+# O designer VB6 preserva espaços e linhas finais nos fontes gerados.
+*.frm whitespace=-blank-at-eol,-blank-at-eof
+*.bas whitespace=-blank-at-eol,-blank-at-eof
+*.vbp whitespace=-blank-at-eol,-blank-at-eof
+.editorconfig text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf

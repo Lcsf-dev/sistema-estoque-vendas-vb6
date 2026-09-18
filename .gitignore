@@ -1,0 +1,43 @@
+# Dados, backups e credenciais locais
+backups/
+backup_*/
+bin/
+*.bak
+*.trn
+*.mdf
+*.ndf
+*.ldf
+*.rar
+*.zip
+*.7z
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.key
+*.pem
+
+# Compilação e estado local do VB6
+*.exe
+*.dll
+*.ocx
+*.obj
+*.pdb
+*.vbw
+*.vbi
+*.oca
+*.log
+*.tmp
+*.log.*
+~$*
+
+# Relatórios gerados e informações específicas da instalação
+Consulta_*.csv
+docs/IMPLANTACAO.md
+docs/MANIFESTO_SHA256.json
+database/testes/resultados/
+.vs/
+.idea/
+Thumbs.db
+Desktop.ini

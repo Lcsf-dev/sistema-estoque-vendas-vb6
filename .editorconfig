@@ -1,0 +1,10 @@
+root = true
+
+[*.{md,sql,ps1,json,yml,yaml}]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{bas,frm,cls,ctl,vbp}]
+end_of_line = crlf
+# Configure o editor para Windows-1252 ao editar fontes VB6.
