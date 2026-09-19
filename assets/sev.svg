@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="SEV: estoque e vendas">
+  <rect x="8" y="8" width="240" height="240" rx="52" fill="#17365b"/>
+  <path d="M52 86L121 50L191 86L121 124Z" fill="#f1f7ff"/>
+  <path d="M52 98L115 132V201L52 164Z" fill="#35b9ed"/>
+  <path d="M127 132L191 98V164L127 201Z" fill="#1788c4"/>
+  <path d="M89 67L156 103" fill="none" stroke="#17365b" stroke-width="10"/>
+  <circle cx="188" cy="188" r="43" fill="#17365b"/>
+  <circle cx="188" cy="188" r="35" fill="#f1f7ff"/>
+  <path d="M170 188L182 200L207 176" fill="none" stroke="#1788c4" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
