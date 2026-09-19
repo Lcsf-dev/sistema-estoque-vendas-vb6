@@ -6,8 +6,8 @@ Begin VB.Form frmPDV
    ScaleWidth = 13400
    ScaleHeight = 9750
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -76,6 +76,7 @@ Begin VB.Form frmPDV
       TabIndex = 3
    End
    Begin VB.CommandButton cmdPesquisar
+      Style = 1
       Left = 9200
       Top = 1430
       Width = 3000
@@ -115,6 +116,7 @@ Begin VB.Form frmPDV
       TabIndex = 6
    End
    Begin VB.CommandButton cmdAdicionar
+      Style = 1
       Left = 11100
       Top = 2330
       Width = 1700
@@ -123,6 +125,7 @@ Begin VB.Form frmPDV
       TabIndex = 7
    End
    Begin VB.ListBox lstItens
+      IntegralHeight = 0
       Left = 300
       Top = 3000
       Width = 12500
@@ -131,6 +134,7 @@ Begin VB.Form frmPDV
       TabIndex = 8
    End
    Begin VB.CommandButton cmdRemover
+      Style = 1
       Left = 300
       Top = 5400
       Width = 2400
@@ -209,6 +213,7 @@ Begin VB.Form frmPDV
       TabIndex = 13
    End
    Begin VB.CommandButton cmdPagamento
+      Style = 1
       Left = 8500
       Top = 6630
       Width = 3000
@@ -217,6 +222,7 @@ Begin VB.Form frmPDV
       TabIndex = 14
    End
    Begin VB.ListBox lstPagamentos
+      IntegralHeight = 0
       Left = 300
       Top = 7400
       Width = 8500
@@ -225,6 +231,7 @@ Begin VB.Form frmPDV
       TabIndex = 15
    End
    Begin VB.CommandButton cmdRemoverPagamento
+      Style = 1
       Left = 9200
       Top = 7500
       Width = 3400
@@ -233,6 +240,7 @@ Begin VB.Form frmPDV
       TabIndex = 16
    End
    Begin VB.CommandButton cmdFinalizar
+      Style = 1
       Left = 300
       Top = 8900
       Width = 2800
@@ -241,6 +249,7 @@ Begin VB.Form frmPDV
       TabIndex = 17
    End
    Begin VB.CommandButton cmdNova
+      Style = 1
       Left = 3600
       Top = 8900
       Width = 2800
@@ -249,6 +258,7 @@ Begin VB.Form frmPDV
       TabIndex = 18
    End
    Begin VB.CommandButton cmdFechar
+      Style = 1
       Left = 9900
       Top = 8900
       Width = 2800
@@ -263,6 +273,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private Type ItemCarrinho
     Tipo As String
@@ -287,12 +298,16 @@ Private mConcluida As Boolean
 
 Private Sub Form_Load()
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     PopularLista cboCaixa, Consultar("dbo.usp_CaixasListar"), "CaixaID", "Terminal"
     PopularLista cboCliente, Consultar("dbo.usp_ClientesListar"), "ClienteID", "Nome", True
     cboTipo.AddItem "Produto": cboTipo.AddItem "Serviço": cboTipo.ListIndex = 0
     cboForma.AddItem "DINHEIRO": cboForma.AddItem "PIX": cboForma.AddItem "DEBITO": cboForma.AddItem "CREDITO": cboForma.ListIndex = 0
     txtQuantidade.Text = "1": txtDesconto.Text = "0"
     mChave = NovoGUID()
+    AtualizarResumo
     Exit Sub
 Falha: ExibirErro Err.Description
 End Sub
@@ -361,17 +376,22 @@ Private Function Total() As Currency
     If Total < 0 Then Err.Raise vbObjectError + 245, , "Desconto maior que o subtotal."
 End Function
 Private Sub AtualizarResumo()
-    Dim i As Long, pago As Currency
+    Dim i As Long, pago As Currency, troco As Currency
     lstItens.Clear
     For i = 1 To mQuantidade
-        lstItens.AddItem mItens(i).Tipo & " | " & mItens(i).Nome & " | " & CStr(mItens(i).Quantidade) & " x " & Format$(mItens(i).Preco, "0.00")
+        lstItens.AddItem mItens(i).Tipo & " | " & mItens(i).Nome & " | " & CStr(mItens(i).Quantidade) & " x R$ " & Format$(mItens(i).Preco, "0.00") & " = R$ " & Format$(mItens(i).Quantidade * mItens(i).Preco, "0.00")
     Next i
     lstPagamentos.Clear
     For i = 1 To mQuantidadePagamentos
         lstPagamentos.AddItem mPagamentos(i).Forma & " | R$ " & Format$(mPagamentos(i).Valor, "0.00") & " | Troco: " & Format$(mPagamentos(i).Recebido - mPagamentos(i).Valor, "0.00")
         pago = pago + mPagamentos(i).Valor
+        troco = troco + mPagamentos(i).Recebido - mPagamentos(i).Valor
     Next i
-    lblTotal.Caption = "Total: R$ " & Format$(Total(), "0.00") & " | Pago: R$ " & Format$(pago, "0.00") & " | Falta: R$ " & Format$(Total() - pago, "0.00")
+    lblTotal.Caption = "R$ " & Format$(Total(), "#,##0.00")
+    Me.Controls("uiPago").Caption = "Pago   R$ " & Format$(pago, "#,##0.00")
+    Me.Controls("uiFalta").Caption = "Falta   R$ " & Format$(Total() - pago, "#,##0.00")
+    Me.Controls("uiTroco").Caption = "Troco   R$ " & Format$(troco, "#,##0.00")
+    AtualizarRolagem Me
 End Sub
 Private Sub txtDesconto_LostFocus()
     On Error GoTo Falha
@@ -482,3 +502,23 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     End If
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    If Shift <> 0 Then Exit Sub
+    If KeyCode = vbKeyF3 And cmdPesquisar.Enabled Then
+        KeyCode = 0
+        cmdPesquisar_Click
+    End If
+    If KeyCode = vbKeyF9 And cmdFinalizar.Enabled Then
+        KeyCode = 0
+        cmdFinalizar_Click
+    End If
+    If KeyCode = vbKeyF4 And cmdAdicionar.Enabled Then
+        KeyCode = 0
+        cmdAdicionar_Click
+    End If
+End Sub

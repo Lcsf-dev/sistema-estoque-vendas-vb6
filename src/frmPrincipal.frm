@@ -7,9 +7,10 @@ Begin VB.Form frmPrincipal
    ClientWidth     =   10200
    LinkTopic       =   "Form1"
    ScaleHeight     =   8200
-   ScaleWidth      =   4560
+   ScaleWidth      =   10200
    StartUpPosition =   2  'Windows Default
    Begin VB.CommandButton cmdTestarConexao 
+      Style = 1
       Caption         =   "Testar conexão"
       Height          =   615
       Left            =   240
@@ -18,6 +19,7 @@ Begin VB.Form frmPrincipal
       Width           =   1335
    End
    Begin VB.CommandButton cmdAbrirServicos
+      Style = 1
       Caption         =   "Cadastrar serviços"
       Height          =   615
       Left            =   240
@@ -26,6 +28,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 1
    End
    Begin VB.CommandButton cmdCategorias
+      Style = 1
       Left = 240
       Top = 1920
       Width = 3300
@@ -34,6 +37,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 3
    End
    Begin VB.CommandButton cmdClientes
+      Style = 1
       Left = 240
       Top = 2760
       Width = 3300
@@ -42,6 +46,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 5
    End
    Begin VB.CommandButton cmdFornecedores
+      Style = 1
       Left = 240
       Top = 3600
       Width = 3300
@@ -50,6 +55,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 7
    End
    Begin VB.CommandButton cmdProdutos
+      Style = 1
       Left = 240
       Top = 4440
       Width = 3300
@@ -58,6 +64,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 9
    End
    Begin VB.CommandButton cmdEstoque
+      Style = 1
       Left = 4800
       Top = 300
       Width = 4800
@@ -66,6 +73,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 0
    End
    Begin VB.CommandButton cmdCaixa
+      Style = 1
       Left = 4800
       Top = 1140
       Width = 4800
@@ -74,6 +82,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 2
    End
    Begin VB.CommandButton cmdPDV
+      Style = 1
       Left = 4800
       Top = 1980
       Width = 4800
@@ -82,6 +91,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 4
    End
    Begin VB.CommandButton cmdConsultas
+      Style = 1
       Left = 4800
       Top = 2820
       Width = 4800
@@ -90,6 +100,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 6
    End
    Begin VB.CommandButton cmdUsuarios
+      Style = 1
       Left = 4800
       Top = 3660
       Width = 4800
@@ -98,6 +109,7 @@ Begin VB.Form frmPrincipal
       TabIndex = 8
    End
    Begin VB.CommandButton cmdConfiguracoes
+      Style = 1
       Left = 4800
       Top = 4500
       Width = 4800
@@ -113,6 +125,7 @@ Begin VB.Form frmPrincipal
       Caption = ""
    End
    Begin VB.CommandButton cmdAtualizarPainel
+      Style = 1
       Left = 300
       Top = 7080
       Width = 3300
@@ -127,6 +140,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private Sub cmdTestarConexao_Click()
     Dim conexao As ADODB.Connection
@@ -200,13 +214,18 @@ End Sub
 
 Private Sub cmdEstoque_Click()
     frmEstoque.Show vbModal
+    AtualizarPainel
 End Sub
 
 Private Sub cmdCaixa_Click()
     frmCaixa.Show vbModal
+    AtualizarPainel
 End Sub
 
 Private Sub Form_Load()
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     AtualizarPainel
     Me.Caption = "SEV - Estoque e Vendas | " & PerfilAtual
     cmdUsuarios.Enabled = (PerfilAtual = "Administrador")
@@ -230,6 +249,7 @@ End Sub
 
 Private Sub cmdPDV_Click()
     frmPDV.Show vbModal
+    AtualizarPainel
 End Sub
 
 Private Sub cmdConsultas_Click()
@@ -242,15 +262,19 @@ End Sub
 
 Private Sub cmdConfiguracoes_Click()
     frmConfiguracoes.Show vbModal
+    AtualizarPainel
 End Sub
 
 Private Sub AtualizarPainel()
     Dim rs As ADODB.Recordset
     On Error GoTo Falha
     Set rs = Consultar("dbo.usp_PainelResumo")
-    lblPainel.Caption = Texto(rs.Fields("Estabelecimento").Value) & vbCrLf & _
-        "Hoje: " & Texto(rs.Fields("VendasHoje").Value) & " venda(s) | Total: R$ " & Format$(rs.Fields("TotalHoje").Value, "0.00") & vbCrLf & _
-        "Produtos no mínimo: " & Texto(rs.Fields("ProdutosNoMinimo").Value) & " | Caixas abertos: " & Texto(rs.Fields("CaixasAbertos").Value)
+    Me.Controls("uiEstabelecimento").Caption = Texto(rs.Fields("Estabelecimento").Value)
+    Me.Controls("uiValor0").Caption = Texto(rs.Fields("VendasHoje").Value)
+    Me.Controls("uiValor1").Caption = "R$ " & Format$(rs.Fields("TotalHoje").Value, "#,##0.00")
+    Me.Controls("uiValor2").Caption = Texto(rs.Fields("ProdutosNoMinimo").Value)
+    Me.Controls("uiValor3").Caption = Texto(rs.Fields("CaixasAbertos").Value)
+    lblPainel.Caption = "Resumo atualizado às " & Format$(Now, "hh:nn")
     rs.Close
     Exit Sub
 Falha:
@@ -258,4 +282,15 @@ Falha:
 End Sub
 Private Sub cmdAtualizarPainel_Click()
     AtualizarPainel
+End Sub
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    If Shift = 0 And KeyCode = vbKeyF9 And cmdPDV.Enabled Then
+        KeyCode = 0
+        cmdPDV_Click
+    End If
 End Sub

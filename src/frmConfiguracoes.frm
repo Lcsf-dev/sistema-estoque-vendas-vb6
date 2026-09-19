@@ -6,8 +6,8 @@ Begin VB.Form frmConfiguracoes
    ScaleWidth = 9300
    ScaleHeight = 7200
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -87,6 +87,7 @@ Begin VB.Form frmConfiguracoes
       TabIndex = 4
    End
    Begin VB.CommandButton cmdSalvar
+      Style = 1
       Left = 300
       Top = 4800
       Width = 3000
@@ -95,6 +96,7 @@ Begin VB.Form frmConfiguracoes
       TabIndex = 5
    End
    Begin VB.CommandButton cmdBackup
+      Style = 1
       Left = 3800
       Top = 4800
       Width = 3800
@@ -116,10 +118,14 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private Sub Form_Load()
     Dim rs As ADODB.Recordset
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     Set rs = Consultar("dbo.usp_ConfiguracoesObter")
     txtNome.Text = Texto(rs.Fields("NomeEstabelecimento").Value)
     chkNegativo.Value = IIf(rs.Fields("PermitirEstoqueNegativo").Value, 1, 0): rs.Close
@@ -156,3 +162,15 @@ Falha:
     cmdBackup.Enabled = True: ExibirErro Err.Description
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    If Shift <> 0 Then Exit Sub
+    If KeyCode = vbKeyF2 And cmdSalvar.Enabled Then
+        KeyCode = 0
+        cmdSalvar_Click
+    End If
+End Sub

@@ -6,8 +6,8 @@ Begin VB.Form frmProdutos
    ScaleWidth = 13000
    ScaleHeight = 9000
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -31,6 +31,7 @@ Begin VB.Form frmProdutos
       TabIndex = 0
    End
    Begin VB.CommandButton cmdPesquisar
+      Style = 1
       Left = 3750
       Top = 600
       Width = 1500
@@ -47,6 +48,7 @@ Begin VB.Form frmProdutos
       TabIndex = 2
    End
    Begin VB.ListBox lstRegistros
+      IntegralHeight = 0
       Left = 300
       Top = 1500
       Width = 4900
@@ -171,6 +173,7 @@ Begin VB.Form frmProdutos
       TabIndex = 10
    End
    Begin VB.CommandButton cmdSalvar
+      Style = 1
       Left = 300
       Top = 7400
       Width = 2850
@@ -179,6 +182,7 @@ Begin VB.Form frmProdutos
       TabIndex = 11
    End
    Begin VB.CommandButton cmdNovo
+      Style = 1
       Left = 3400
       Top = 7400
       Width = 2850
@@ -187,6 +191,7 @@ Begin VB.Form frmProdutos
       TabIndex = 12
    End
    Begin VB.CommandButton cmdSituacao
+      Style = 1
       Left = 6500
       Top = 7400
       Width = 2850
@@ -195,6 +200,7 @@ Begin VB.Form frmProdutos
       TabIndex = 13
    End
    Begin VB.CommandButton cmdFechar
+      Style = 1
       Left = 9600
       Top = 7400
       Width = 2850
@@ -216,6 +222,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private mCodigo As Long
 Private mVersao As Variant
@@ -223,6 +230,9 @@ Private mAtivo As Boolean
 
 Private Sub Form_Load()
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     CarregarOpcoes txtCategoriaID, "dbo.usp_CategoriasListar", "CategoriaID", "Nome"
     CarregarOpcoes txtFornecedorID, "dbo.usp_FornecedoresListar", "FornecedorID", "NomeRazao"
     NovoRegistro
@@ -242,6 +252,7 @@ Private Sub Pesquisar()
         rs.MoveNext
     Loop
     rs.Close
+    AtualizarRolagem Me
 End Sub
 
 Private Sub cmdPesquisar_Click()
@@ -336,3 +347,23 @@ Private Sub cmdFechar_Click()
     Unload Me
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    If Shift <> 0 Then Exit Sub
+    If KeyCode = vbKeyF3 And cmdPesquisar.Enabled Then
+        KeyCode = 0
+        cmdPesquisar_Click
+    End If
+    If KeyCode = vbKeyF2 And cmdSalvar.Enabled Then
+        KeyCode = 0
+        cmdSalvar_Click
+    End If
+    If KeyCode = vbKeyF4 And cmdNovo.Enabled Then
+        KeyCode = 0
+        cmdNovo_Click
+    End If
+End Sub

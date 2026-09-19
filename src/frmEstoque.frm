@@ -6,8 +6,8 @@ Begin VB.Form frmEstoque
    ScaleWidth = 10300
    ScaleHeight = 4600
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -77,6 +77,7 @@ Begin VB.Form frmEstoque
       TabIndex = 3
    End
    Begin VB.CommandButton cmdGravar
+      Style = 1
       Left = 300
       Top = 3500
       Width = 2700
@@ -85,6 +86,7 @@ Begin VB.Form frmEstoque
       TabIndex = 4
    End
    Begin VB.CommandButton cmdFechar
+      Style = 1
       Left = 7200
       Top = 3500
       Width = 1900
@@ -99,9 +101,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private Sub Form_Load()
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     PopularLista cboProduto, Consultar("dbo.usp_ProdutosListar"), "ProdutoID", "Nome"
     cboTipo.AddItem "Entrada / acréscimo": cboTipo.AddItem "Saída / redução": cboTipo.ListIndex = 0
     Exit Sub
@@ -121,3 +127,7 @@ Private Sub cmdFechar_Click()
     Unload Me
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub

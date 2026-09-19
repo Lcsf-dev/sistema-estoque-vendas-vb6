@@ -6,8 +6,8 @@ Begin VB.Form frmConsultas
    ScaleWidth = 13800
    ScaleHeight = 9900
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -62,6 +62,7 @@ Begin VB.Form frmConsultas
       TabIndex = 2
    End
    Begin VB.CommandButton cmdPesquisar
+      Style = 1
       Left = 10900
       Top = 530
       Width = 2000
@@ -70,6 +71,7 @@ Begin VB.Form frmConsultas
       TabIndex = 3
    End
    Begin VB.ListBox lstResultado
+      IntegralHeight = 0
       Left = 300
       Top = 1300
       Width = 13000
@@ -136,6 +138,7 @@ Begin VB.Form frmConsultas
       TabIndex = 9
    End
    Begin VB.CommandButton cmdCancelarVenda
+      Style = 1
       Left = 8300
       Top = 8430
       Width = 2600
@@ -144,6 +147,7 @@ Begin VB.Form frmConsultas
       TabIndex = 10
    End
    Begin VB.CommandButton cmdItens
+      Style = 1
       Left = 8300
       Top = 7530
       Width = 3800
@@ -152,6 +156,7 @@ Begin VB.Form frmConsultas
       TabIndex = 8
    End
    Begin VB.CommandButton cmdExportar
+      Style = 1
       Left = 300
       Top = 9150
       Width = 2200
@@ -166,10 +171,14 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private mDados As ADODB.Recordset
 Private Sub Form_Load()
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     cboTipo.AddItem "VENDAS": cboTipo.AddItem "RESUMO": cboTipo.AddItem "VENDEDOR"
     cboTipo.AddItem "PRODUTOS_SERVICOS"
     cboTipo.AddItem "ESTOQUE": cboTipo.AddItem "MINIMO": cboTipo.AddItem "CAIXA": cboTipo.AddItem "AUDITORIA"
@@ -196,6 +205,7 @@ Private Sub Mostrar(ByVal rs As ADODB.Recordset)
     Loop
     If rs.RecordCount > 0 Then rs.MoveFirst
     Set mDados = rs
+    AtualizarRolagem Me
 End Sub
 Private Sub cmdPesquisar_Click()
     On Error GoTo Falha
@@ -273,3 +283,15 @@ Private Sub cmdExportar_Click()
 Falha: ExibirErro Err.Description
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    If Shift <> 0 Then Exit Sub
+    If KeyCode = vbKeyF3 And cmdPesquisar.Enabled Then
+        KeyCode = 0
+        cmdPesquisar_Click
+    End If
+End Sub

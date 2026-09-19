@@ -6,8 +6,8 @@ Begin VB.Form frmLogin
    ScaleWidth = 5500
    ScaleHeight = 6000
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -81,6 +81,7 @@ Begin VB.Form frmLogin
       TabIndex = 3
    End
    Begin VB.CommandButton cmdEntrar
+      Style = 1
       Left = 400
       Top = 4100
       Width = 1900
@@ -102,15 +103,22 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private mPrimeiro As Boolean
 Private Sub Form_Load()
     Dim rs As ADODB.Recordset
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     Set rs = Consultar("dbo.usp_LoginPreparar", "@Usuario", "")
     mPrimeiro = CBool(rs.Fields("PrimeiroAcesso").Value)
     rs.Close
     txtNome.Enabled = mPrimeiro: txtConfirmacao.Enabled = mPrimeiro
+    txtNome.Visible = mPrimeiro: lblNome.Visible = mPrimeiro
+    txtConfirmacao.Visible = mPrimeiro: lblConfirmacao.Visible = mPrimeiro
+    OrganizarVisual Me
     If mPrimeiro Then cmdEntrar.Caption = "Criar administrador" Else lblAviso.Caption = "Entre com seu usuário e senha."
     Exit Sub
 Falha:
@@ -136,6 +144,7 @@ Private Sub cmdEntrar_Click()
     TokenSessao = CStr(rs.Fields("Token").Value)
     UsuarioAtual = CLng(rs.Fields("UsuarioID").Value)
     PerfilAtual = CStr(rs.Fields("Perfil").Value)
+    NomeUsuarioAtual = Trim$(txtUsuario.Text)
     rs.Close
     txtSenha.Text = "": txtConfirmacao.Text = "": prova = ""
     frmPrincipal.Show
@@ -146,3 +155,7 @@ Falha:
     ExibirErro Err.Description
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub

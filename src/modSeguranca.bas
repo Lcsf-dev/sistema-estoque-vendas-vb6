@@ -10,6 +10,7 @@ Private Declare Function StringFromGUID2 Lib "ole32.dll" (ByRef guid As Any, ByV
 Public TokenSessao As String
 Public UsuarioAtual As Long
 Public PerfilAtual As String
+Public NomeUsuarioAtual As String
 
 Public Sub Main()
     frmLogin.Show

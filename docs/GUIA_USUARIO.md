@@ -1,6 +1,6 @@
 # SEV — Sistema de Estoque e Vendas
 
-Versão 1.1, continuação do projeto existente em Visual Basic 6, ADO e SQL Server Express. Banco principal: **SEV_DB**. Instância configurada: **.\SQLEXPRESS**. Aplicação local; não requer internet para funcionar.
+Versão 1.2, continuação do projeto existente em Visual Basic 6, ADO e SQL Server Express. Banco principal: **SEV_DB**. Instância configurada: **.\SQLEXPRESS**. Aplicação local; não requer internet para funcionar.
 
 ## Começar
 
@@ -15,7 +15,7 @@ Versão 1.1, continuação do projeto existente em Visual Basic 6, ADO e SQL Ser
 9. Clique em **Finalizar venda**. Após a confirmação, use **Nova venda**.
 10. Ao encerrar o dia, confira fisicamente o dinheiro e feche o caixa. A tela informa a diferença entre o saldo esperado e o contado.
 
-O executável é `bin\SistemaEstoqueVendas.exe`. A versão final instalada abriu normalmente e apresentou a tela **SEV - Acesso**. Você pode utilizá-la sem abrir o editor VB6.
+O executável é `bin\SistemaEstoqueVendas.exe`. A versão 1.2 foi compilada e instalada nessa pasta. O atalho **SEV - Estoque e Vendas** na Área de Trabalho aponta para esse executável. Sua abertura não foi retestada nesta entrega, conforme solicitado.
 
 ## Funcionalidades
 
@@ -74,3 +74,9 @@ O projeto usa o driver OLE DB 19 de 32 bits (`MSOLEDBSQL19`) e a referência ADO
 ## Limites do escopo
 
 Sem emissão fiscal, NFC-e, impressão, TEF, API bancária, PIX real, integração externa ou ordem de serviço. Os valores registrados dependem da conferência do operador. A versão foi validada com dados fictícios em banco separado; confira o fluxo operacional da sua loja antes de iniciar registros reais.
+
+## Interface e teclado
+
+Maximize a janela para ampliar a área das listas e campos. O painel aumenta fontes e espaçamentos com limite; os controles continuam nativos do VB6. F2 salva cadastros, F3 pesquisa, F4 inicia novo cadastro ou adiciona item no PDV. F9 abre o PDV no painel e finaliza a venda dentro do PDV, mantendo a confirmação existente. Tab percorre os campos.
+
+O layout foi avaliado em 2560 × 1440 com escala de 100%. Outras escalas de DPI e monitores não foram verificadas. O PDV utiliza uma janela mínima de aproximadamente 1120 × 800 pixels lógicos para preservar a legibilidade.

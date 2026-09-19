@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin VB.Form frmServicos
-   BorderStyle     =   1
+   BorderStyle     =   2
    Caption         =   "Cadastro de serviços"
    ClientHeight    =   5640
    ClientWidth     =   13920
-   MaxButton       =   0
+   MaxButton       =   -1
    MinButton       =   0
    ScaleHeight     =   5640
    ScaleWidth      =   13920
@@ -106,6 +106,7 @@ Begin VB.Form frmServicos
       TabIndex = 7
    End
    Begin VB.CommandButton cmdSalvar
+      Style = 1
       Left            =   360
       Top             =   4500
       Width           =   1680
@@ -114,6 +115,7 @@ Begin VB.Form frmServicos
       TabIndex = 8
    End
    Begin VB.CommandButton cmdLimpar
+      Style = 1
       Left            =   2400
       Top             =   4500
       Width           =   1680
@@ -122,6 +124,7 @@ Begin VB.Form frmServicos
       TabIndex = 9
    End
    Begin VB.CommandButton cmdFechar
+      Style = 1
       Left            =   5400
       Top             =   4500
       Width           =   1680
@@ -146,6 +149,7 @@ Begin VB.Form frmServicos
       TabIndex = 0
    End
    Begin VB.CommandButton cmdPesquisar
+      Style = 1
       Left = 11700
       Top = 780
       Width = 1800
@@ -162,6 +166,7 @@ Begin VB.Form frmServicos
       TabIndex = 3
    End
    Begin VB.ListBox lstRegistros
+      IntegralHeight = 0
       Left = 7800
       Top = 1800
       Width = 5700
@@ -169,6 +174,7 @@ Begin VB.Form frmServicos
       TabIndex = 4
    End
    Begin VB.CommandButton cmdSituacao
+      Style = 1
       Left = 7800
       Top = 4620
       Width = 2700
@@ -183,6 +189,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 Private mCodigo As Long
 Private mVersao As Variant
 Private mAtivo As Boolean
@@ -331,6 +338,9 @@ End Sub
 
 Private Sub Form_Load()
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     mVersao = Null
     lblOrientacao.Caption = "Selecione na lista para editar. Limpar inicia um novo serviço."
     Pesquisar
@@ -349,6 +359,7 @@ Private Sub Pesquisar()
         rs.MoveNext
     Loop
     rs.Close
+    AtualizarRolagem Me
 End Sub
 
 Private Sub cmdPesquisar_Click()
@@ -391,4 +402,24 @@ Private Sub cmdSituacao_Click()
     Exit Sub
 Falha:
     ExibirErro Err.Description
+End Sub
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    If Shift <> 0 Then Exit Sub
+    If KeyCode = vbKeyF3 And cmdPesquisar.Enabled Then
+        KeyCode = 0
+        cmdPesquisar_Click
+    End If
+    If KeyCode = vbKeyF2 And cmdSalvar.Enabled Then
+        KeyCode = 0
+        cmdSalvar_Click
+    End If
+    If KeyCode = vbKeyF4 And cmdLimpar.Enabled Then
+        KeyCode = 0
+        cmdLimpar_Click
+    End If
 End Sub

@@ -1,8 +1,11 @@
 # Histórico de mudanças
 
-## Não lançado
+## 1.2 — Interface modernizada
 
-- Planejado: modernização visual e adaptação ao tamanho das janelas.
+- Menu lateral azul-escuro, painel com indicadores e identificação do usuário.
+- Layout adaptável, fontes Segoe UI e crescimento controlado ao maximizar.
+- Cadastros com pesquisa e edição separadas; PDV com total, pagamentos e troco destacados.
+- Atalhos F2, F3, F4 e F9 conforme a tela; regras de negócio e banco preservados.
 
 ## Base inicial versionada
 

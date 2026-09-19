@@ -6,8 +6,8 @@ Begin VB.Form frmUsuarios
    ScaleWidth = 9900
    ScaleHeight = 6800
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -15,6 +15,7 @@ Begin VB.Form frmUsuarios
       Charset = 0
    EndProperty
    Begin VB.ListBox lstUsuarios
+      IntegralHeight = 0
       Left = 300
       Top = 300
       Width = 4200
@@ -113,6 +114,7 @@ Begin VB.Form frmUsuarios
       TabIndex = 6
    End
    Begin VB.CommandButton cmdSalvar
+      Style = 1
       Left = 5000
       Top = 5550
       Width = 1900
@@ -121,6 +123,7 @@ Begin VB.Form frmUsuarios
       TabIndex = 7
    End
    Begin VB.CommandButton cmdNovo
+      Style = 1
       Left = 7300
       Top = 5550
       Width = 1900
@@ -135,11 +138,15 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private mCodigo As Long
 Private mUsuarios As ADODB.Recordset
 Private Sub Form_Load()
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     PopularLista cboPerfil, Consultar("dbo.usp_PerfisListar"), "PerfilID", "Nome"
     Atualizar
     Exit Sub
@@ -191,3 +198,19 @@ Private Sub cmdSalvar_Click()
 Falha: ExibirErro Err.Description
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+    If Shift <> 0 Then Exit Sub
+    If KeyCode = vbKeyF2 And cmdSalvar.Enabled Then
+        KeyCode = 0
+        cmdSalvar_Click
+    End If
+    If KeyCode = vbKeyF4 And cmdNovo.Enabled Then
+        KeyCode = 0
+        cmdNovo_Click
+    End If
+End Sub

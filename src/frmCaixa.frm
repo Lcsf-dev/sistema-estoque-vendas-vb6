@@ -6,8 +6,8 @@ Begin VB.Form frmCaixa
    ScaleWidth = 10300
    ScaleHeight = 7600
    StartUpPosition = 2
-   BorderStyle = 1
-   MaxButton = 0
+   BorderStyle = 2
+   MaxButton = -1
    BeginProperty Font
       Name = "Tahoma"
       Size = 9
@@ -46,6 +46,7 @@ Begin VB.Form frmCaixa
       TabIndex = 1
    End
    Begin VB.CommandButton cmdAbrir
+      Style = 1
       Left = 300
       Top = 1200
       Width = 1900
@@ -69,6 +70,7 @@ Begin VB.Form frmCaixa
       TabIndex = 3
    End
    Begin VB.CommandButton cmdAtualizar
+      Style = 1
       Left = 300
       Top = 2900
       Width = 2700
@@ -131,6 +133,7 @@ Begin VB.Form frmCaixa
       TabIndex = 7
    End
    Begin VB.CommandButton cmdMovimentar
+      Style = 1
       Left = 300
       Top = 5500
       Width = 2700
@@ -155,6 +158,7 @@ Begin VB.Form frmCaixa
       TabIndex = 9
    End
    Begin VB.CommandButton cmdFecharCaixa
+      Style = 1
       Left = 5300
       Top = 6630
       Width = 2700
@@ -169,9 +173,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+Private mVisualPronto As Boolean
 
 Private Sub Form_Load()
     On Error GoTo Falha
+    PrepararVisual Me
+    mVisualPronto = True
+    OrganizarVisual Me
     PopularLista cboTerminal, Consultar("dbo.usp_TerminaisListar"), "TerminalCaixaID", "Nome"
     cboTipo.AddItem "SUPRIMENTO": cboTipo.AddItem "SANGRIA": cboTipo.ListIndex = 0
     Atualizar
@@ -227,3 +235,7 @@ Private Sub cmdFecharCaixa_Click()
 Falha: ExibirErro Err.Description
 End Sub
 
+
+Private Sub Form_Resize()
+    If mVisualPronto And Me.WindowState <> vbMinimized Then OrganizarVisual Me
+End Sub
