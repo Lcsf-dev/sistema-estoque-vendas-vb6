@@ -6,6 +6,10 @@
 
 O SEV reúne operações comerciais locais em uma aplicação desktop. O projeto explora a evolução de software legado com foco em integridade dos dados, regras transacionais e organização da interface. A versão **1.2** inclui painel com indicadores, menu lateral e layouts que aproveitam o redimensionamento das janelas.
 
+## 🖥️ Tela do sistema
+
+![Painel do SEV com indicadores, menu lateral e atalhos para vendas, caixa e estoque](docs/imagens/SEV.png)
+
 ## 🎯 O problema de negócio
 
 Produtos e serviços podem participar da mesma venda, mas somente produtos movimentam estoque. Uma venda de uma película de **R$ 20,00** com aplicação de **R$ 15,00** precisa registrar R$ 35,00 em pagamentos e baixar apenas uma unidade do produto. Se houver cancelamento, o estoque e o caixa recebem movimentos inversos, preservando o histórico.
