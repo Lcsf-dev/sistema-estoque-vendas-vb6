@@ -1,6 +1,6 @@
 # Inventário SQL
 
-Comparação das definições instaladas com os scripts versionados: **45 procedures, 5 triggers e 1 view**. Todas têm fonte correspondente. Não contém exportação de dados.
+Inventário conferido durante a preparação inicial do repositório: **45 procedures, 5 triggers e 1 view**. Todas têm fonte correspondente. Não contém exportação de dados.
 
 | Objeto | Tipo | Fonte |
 |---|---|---|
@@ -55,3 +55,5 @@ Comparação das definições instaladas com os scripts versionados: **45 proced
 | `dbo.trg_Produtos_Auditoria` | TR | [005_AuditoriaCadastros.sql](../database/migracoes/005_AuditoriaCadastros.sql) |
 | `dbo.trg_Servicos_Auditoria` | TR | [005_AuditoriaCadastros.sql](../database/migracoes/005_AuditoriaCadastros.sql) |
 | `dbo.vw_VendasFinalizadas` | V | [006_PainelRelatorios.sql](../database/migracoes/006_PainelRelatorios.sql) |
+
+Legenda: **P** = stored procedure; **TR** = trigger; **V** = view. As 17 tabelas e sua ordem de criação estão no [mapa de criação SQL](MAPA_CRIACAO_SQL.md).

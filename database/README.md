@@ -6,7 +6,7 @@ Código T-SQL e utilitários de instalação, testes e recuperação. Não são 
 
 ## Instalação nova
 
-Na raiz do repositório, execute `./database/Instalar-Banco.ps1`. O padrão é `.SQLEXPRESS` e `SEV_DB`, com autenticação Windows. O instalador recusa qualquer banco de destino já existente. Pode-se informar `-Servidor` e `-BancoDestino`; ao usar outro nome, ajuste também a conexão do aplicativo.
+Na raiz do repositório, execute `./database/Instalar-Banco.ps1`. O padrão é `.\SQLEXPRESS` e `SEV_DB`, com autenticação Windows. O instalador recusa qualquer banco de destino já existente. Pode-se informar `-Servidor` e `-BancoDestino`; ao usar outro nome, ajuste também a conexão do aplicativo.
 
 A estrutura inicial é aplicada primeiro. As migrações são aplicadas dentro de uma transação; em caso de falha, a criação inicial do banco pode permanecer para diagnóstico, mas o instalador não anuncia sucesso. Não tenta apagar automaticamente um banco de instalação.
 
@@ -31,7 +31,7 @@ Os números 002/003 refletem a história do desenvolvimento; a ordem de instala�
 
 ## Evoluir o banco existente
 
-Faça backup, crie uma migração nova com nome descritivo e valide-a em ambiente isolado. Não reexecute a estrutura inicial nem substitua o banco por dados de demonstração. As alterações do visual planejadas não dependem de recriar o SEV_DB.
+Faça backup, crie uma migração nova com nome descritivo e valide-a em ambiente isolado. Não reexecute a estrutura inicial nem substitua o banco por dados de demonstração. A modernização visual da versão 1.2 não exige recriar o SEV_DB.
 
 ## Navegação
 

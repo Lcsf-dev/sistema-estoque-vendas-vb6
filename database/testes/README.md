@@ -1,6 +1,6 @@
 # Testes do banco
 
-Execute `./database/testes/Executar-Testes.ps1` a partir do repositório. Pode informar `-Servidor '.SQLEXPRESS'`. São usados apenas dados fictícios num banco novo cujo nome começa com `SEV_TESTES_` e termina com um GUID.
+Execute `./database/testes/Executar-Testes.ps1` a partir do repositório. Pode informar `-Servidor '.\SQLEXPRESS'`. São usados apenas dados fictícios num banco novo cujo nome começa com `SEV_TESTES_` e termina com um GUID.
 
 O runner testa a instalação completa antes das regras. Uma falha lança uma exceção e encerra com erro. A limpeza no bloco `finally` remove exclusivamente o banco criado pelo runner. Use `-ConservarBanco` para inspecionar o resultado no SSMS.
 

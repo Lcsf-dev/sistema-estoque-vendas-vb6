@@ -45,3 +45,7 @@ Abra o `.vbp`, confirme a referência **Microsoft ActiveX Data Objects 2.8 Libra
 ## Manutenção
 
 Mantenha backups antes de mudanças de schema. Não permita atualizações diretas de saldo nas telas; use a procedure de movimentação. Não concatene entradas do usuário em SQL. O usuário Windows com privilégios de administrador do SQL não pode ser restringido pelos perfis internos do SEV; uma implantação compartilhada deve separar as permissões administrativas da conta operacional.
+
+## Interface da versão 1.2
+
+`modInterface` centraliza o tema Segoe UI, as cores e o redimensionamento. Os 13 formulários preservam seus eventos de negócio. Painel, PDV e cadastros possuem organização específica, com crescimento limitado de fontes e controles. A mudança visual não introduziu migração SQL. Consulte [as decisões técnicas](DECISOES_TECNICAS.md) para os limites de DPI e de implantação.

@@ -17,4 +17,4 @@ O [inventário](INVENTARIO_SQL.md) contém links para os arquivos exatos. Não �
 
 ## Limitações a explicar
 
-Os perfis internos não restringem um administrador do SQL Server. O projeto não integra emissão fiscal, pagamentos bancários ou ordem de serviço. As quantidades são inteiras, as listagens possuem limites documentados e a modernização visual ainda está planejada. Esses limites fazem parte do escopo atual.
+Os perfis internos não restringem um administrador do SQL Server. O projeto não integra emissão fiscal, pagamentos bancários ou ordem de serviço. As quantidades são inteiras, as listagens possuem limites documentados e a interface modernizada mantém controles nativos do VB6. Esses limites fazem parte do escopo atual.

@@ -1,5 +1,12 @@
 # Histórico de mudanças
 
+## Documentação do portfólio
+
+- README atualizado para a interface entregue na versão 1.2.
+- Mapa de criação SQL e decisões técnicas com links para as implementações.
+- Corrigidas referências textuais à instância local e ao planejamento visual já concluído.
+- Nenhuma alteração no schema ou execução de novos testes nesta atualização.
+
 ## 1.2 — Interface modernizada
 
 - Menu lateral azul-escuro, painel com indicadores e identificação do usuário.
